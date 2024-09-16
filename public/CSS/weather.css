@@ -1,0 +1,253 @@
+.main{
+    width: 100%;
+    float: left;
+    height: 100vh;
+    z-index: 1;
+    position: relative;
+}
+.searchpanel{
+    width: inherit;
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+.mainsearch{
+background-color: whitesmoke;
+width: 30%;
+display: flex;
+border-radius: 30px;
+}
+.searchicon{  
+    background: none;
+    border: none;
+    padding:2% 2%;
+    margin-right: 1%;
+}
+.searchicon img{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.inputfield{
+    width: 90%;
+    background-color: whitesmoke;
+    border: none;
+    font-size: larger;
+    padding-left: 2%;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+.inputfield:focus{
+    outline: none;
+}
+.card{
+    background-color: rgb(44, 145, 145);
+    width: 40%;
+    margin-top: 2%;
+    border-radius: 20px;
+    margin-left: 30%;
+}
+.icon{
+    width: 4rem;
+    height: 4rem;
+}
+.iconandtemp{
+    display: flex;
+    margin-top: 3%;
+    position: relative;
+}
+.iconandtemp div{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: aliceblue;
+    margin-left: 5%;
+    margin-top: 10%;
+}
+.placename{
+    font-size: large;
+   font-weight: bold;
+display: inline-block;
+margin-top: 10%;
+
+}
+.country{
+    width: 40%;
+    text-align: center;
+}
+.cardtop{
+    display: flex;
+    justify-content: space-between;
+}
+.margin{
+    font-size: larger;
+    margin-bottom: 2%;
+}
+.timedate{
+   display: flex;
+   justify-content: space-between;
+   margin:5% 3%;
+}
+.weathericon{
+    width: 200px;
+    height: 200px;
+    margin-left: 30%;
+}
+.weatherdesc{
+    margin-top: 5%;
+    text-align: center;
+}
+.icondiv{
+    position: absolute;
+    left: 45%;
+    top: -70%;
+}
+.cloudiness{
+    width: 30%;
+    height: 30%;
+    position: relative;
+ 
+}
+.cloudiness video {
+    width: 100%;
+   height: 100%;
+   z-index: -1;
+   pointer-events: none;
+position: absolute;
+object-fit: cover;
+border-radius: 20px;
+}
+.cloudhead{
+    margin-top: 10%;
+    text-align: center;
+}
+.sun{
+    width: 30%;
+display: flex;
+}
+.row1{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.sunrise{
+    background-color: antiquewhite;
+    width: 50%;
+   background: url(" https://th.bing.com/th/id/OIG4.oXHHW5t3AGpTCxGM_zR9?w=270&h=270&c=6&r=0&o=5&dpr=1.3&pid=ImgGn");
+    background-size: cover;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.sunset{
+    background-color: beige;
+    width: 50%;
+    background: url("https://th.bing.com/th/id/OIG1.1llI9FnSyLrnrsLi9Rtg?w=270&h=270&c=6&r=0&o=5&dpr=1.3&pid=ImgGn");
+    background-size: cover;
+    text-align: center;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.row1 h1{
+    margin-top: 20%;
+}
+.wind{
+    opacity: 0;
+    transition: opacity 2s ease-in;
+}
+.extrafields:hover .wind{
+opacity: 1;
+    animation: rotate 1s ease-in-out infinite;
+}
+.extrafields:hover .humidity{
+    opacity: 1;
+    }
+    .extrafields:hover .pressure{
+        opacity: 1;
+        }
+        .extrafields:hover .groundlevel{
+            opacity: 1;
+            }
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+.humidity{
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+.pressure{
+    opacity: 0;
+    transition: opacity 2s linear;
+}
+.groundlevel{
+    opacity: 0;
+    transition: opacity 2s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+.extrafields{
+    width: 30%;
+    background-color: gold;
+display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    border-radius: 20px;
+}
+.extrafields h4{
+text-align: center;
+}
+.extrafields img{
+height: 60px;
+width: 60px;
+position: absolute;
+left: 10%;
+bottom: 3%;
+}
+.extrafields div{
+    position: relative;
+}
+.extrafields div span{
+    width: 100%;
+    display: block;
+    margin-left: 50%;
+    font-size: medium;
+    font-weight: bold;
+}
+.temphigh{
+    display: flex;
+}
+.temphigh h5{
+    margin:0;
+    padding:0;
+    margin: 12% 0%;
+    color: aliceblue;
+}
+/* theme button */
+.toggle{
+    width: 5%;
+    background-color: black;
+    height: 5vh;
+    border-radius: 40px;
+    padding: .1%;
+    position: absolute;
+    left: 92%;
+}
+.ball{
+    background-color: white;
+    width: 35px;
+    height: 5vh;
+    border-radius: 50%;
+    /* margin-left: 65%; */
+}
+.error{
+    position: absolute;
+    left: 36%;
+    top: 10%;
+}
