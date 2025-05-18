@@ -15,15 +15,12 @@ import WaterDroplets from "./WaterDroplets";
 import ThemeSet from "./Theme";
 import { Fetchdata } from "../Services/weatherservice";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
-import AirIcon from "@mui/icons-material/Air";
-import OpacityIcon from "@mui/icons-material/Opacity";
 import CompressIcon from "@mui/icons-material/Compress";
 import FilterDramaIcon from "@mui/icons-material/FilterDrama";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import { motion } from "framer-motion";
 import { keyframes } from "@emotion/react";
-import ToysIcon from "@mui/icons-material/Toys"; // acts as a windmill/fan
 
 const WeatherApp = () => {
   const [theme] = useContext(ThemeContext);
@@ -129,9 +126,6 @@ const rotatingFan = {
   };
 
   // Background image based on theme
-  const backgroundImage = theme
-    ? "url('https://img.icons8.com/emoji/96/sun-emoji.png')"
-    : "url('https://img.icons8.com/emoji/96/full-moon-emoji.png')";
 
   return (
     <Box
@@ -396,7 +390,6 @@ const rotatingFan = {
                 boxShadow: theme
                   ? "0 4px 12px rgba(255, 193, 7, 0.3)"
                   : "0 8px 32px rgba(0, 0, 0, 0.7)",
-                borderRadius: 3,
                 backdropFilter: theme ? "none" : "blur(8px)",
                 border: theme ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
                 display: "flex",
@@ -424,17 +417,19 @@ const rotatingFan = {
                 <Typography variant="body2">
                   {weather.main.humidity} %
                 </Typography>
-</Box>
-                <motion.div
-                  
-                  animate="animate"
-                  style={{ width: 50, height: 50 }}
-                >
-                  <WaterDroplets />
-                </motion.div>
+              </Box>
+              <motion.div animate="animate" style={{ width: 50, height: 50 }}>
+                <WaterDroplets />
+              </motion.div>
             </Box>
 
-            <Grid container spacing={2} mt={4} display={"flex"} justifyContent={"space-between"}>
+            <Grid
+              container
+              spacing={2}
+              mt={4}
+              display={"flex"}
+              justifyContent={"space-between"}
+            >
               {[
                 {
                   label: "Pressure",
@@ -446,20 +441,20 @@ const rotatingFan = {
                   ),
                 },
                 {
-                  label: "Ground Level",
-                  value: `${weather.main.grnd_level} hPa`,
-                  icon: (
-                    <CompressIcon
-                      sx={{ mr: 1, color: theme ? "#6d4c41" : "#bcaaa4" }}
-                    />
-                  ),
-                },
-                {
                   label: "Cloudiness",
                   value: `${weather.clouds.all} %`,
                   icon: (
                     <FilterDramaIcon
                       sx={{ mr: 1, color: theme ? "#90a4ae" : "#b0bec5" }}
+                    />
+                  ),
+                },
+                {
+                  label: "Ground Level",
+                  value: `${weather.main.grnd_level} hPa`,
+                  icon: (
+                    <CompressIcon
+                      sx={{ mr: 1, color: theme ? "#6d4c41" : "#bcaaa4" }}
                     />
                   ),
                 },

@@ -1,4 +1,3 @@
-import React from "react";
 import { styled, keyframes } from "@mui/material/styles";
 
 const drip = keyframes`
