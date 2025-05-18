@@ -1,270 +1,482 @@
-import {Fetchdata} from '../Services/weatherservice'
-import search from '../Assets/search.png'
-import temp from '../Assets/temperature.png'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { ThemeContext } from '../App'
-import ThemeSet from './Theme'
-const WeatherApp=()=>{
-    const[theme]=useContext(ThemeContext)
-    const[isError,seterror]=useState(false)
-    const main=useRef()
-    const error=useRef()
-    useEffect(()=>{
-        fetchcitydata("Tiruvannamalai")
-        if(theme){
-            main.current.style.background="linear-gradient(rgb(205, 63, 63),orange,rgb(221, 221, 30),rgb(205, 63, 63))"
-            error.current.style.color="black"
-        }else{
-            main.current.style.background="linear-gradient(black,darkblue,black)"
-            error.current.style.color="white"
-        }
-    },[theme])
-   
-   
-    const searchcity=async(e)=>{
-        //e.persist() // Keeps the event around bcoz while using async the event become nullified after the callback
-        if(e.currentTarget.id==="citysearch" || e.key === "Enter" ){
-        fetchcitydata(city)
-        }
-        
-    }
-    const fetchcitydata=async(city)=>{
-        try{
-        const response=await Fetchdata(city)
-        console.log(response);
-        setweather(response.data)
-        setimg("https://openweathermap.org/img/wn/"+response.data.weather[0].icon+"@2x.png")
-        const timestamp = response?.data.dt;
-    const timezoneOffset = response?.data.timezone;
-    if (timestamp !== undefined && timezoneOffset !== undefined) {
-        const date = new Date((timestamp + timezoneOffset) * 1000);
-        const converted_date = date.toUTCString();
-        const dateParts = converted_date.split(' ');
-        const dateday = dateParts.slice(0, 4).join(' ');
-        const time = dateParts[4];
-const timeParts = time.split(':');
-const hoursAndMinutes = timeParts.slice(0, 2).join(':');
-const sunrise = new Date((response?.data.sys.sunrise+timezoneOffset) * 1000);
-const converted_date1 = sunrise.toUTCString();
-const dateParts1 = converted_date1.split(' ');
-const time1 = dateParts1[4];
-const timeParts1 = time1.split(':');
-const hoursAndMinutes1 = timeParts1.slice(0, 2).join(':');
-const sunset = new Date((response?.data.sys.sunset  + timezoneOffset) * 1000);
-const converted_date2 = sunset.toUTCString();
-const dateParts2 = converted_date2.split(' ');
-const time2 = dateParts2[4];
-const timeParts2= time2.split(':');
-const hoursAndMinutes2 = timeParts2.slice(0, 2).join(':');
-        setsun({sunrise:hoursAndMinutes1,sunset:hoursAndMinutes2})
-        
-    
-    
-    console.log(dateday.toLocaleString('en-US', { month: 'short', day: 'numeric' }));
-        console.log(time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
-        
-        setdatetime({ date: dateday, time: hoursAndMinutes });}
-seterror(false)
-    }
-    catch(error){
-        console.log(error);
-        seterror(true)
-    }
-    }
-    const[city,setcity]=useState('')
-    const[image,setimg]=useState('')
-    const[timedate,setdatetime]=useState({date:"",time:""})
-    const[sun,setsun]=useState({sunrise:"",sunset:""})
-    const[weather,setweather]=useState(
-        {
-            "coord": {
-                "lon": -0.1257,
-                "lat": 51.5085
-            },
-            "weather": [
-                {
-                    "id": 804,
-                    "main": "Clouds",
-                    "description": "overcast clouds",
-                    "icon": "04n"
-                }
-            ],
-            "base": "stations",
-            "main": {
-                "temp": 15.03,
-                "feels_like": 14.44,
-                "temp_min": 13.21,
-                "temp_max": 16.11,
-                "pressure": 1014,
-                "humidity": 71,
-                "sea_level": 1014,
-                "grnd_level": 1011
-            },
-            "visibility": 10000,
-            "wind": {
-                "speed": 0.89,
-                "deg": 281,
-                "gust": 1.79
-            },
-            "clouds": {
-                "all": 100
-            },
-            "dt": 1725907764,
-            "sys": {
-                "type": 2,
-                "id": 2075535,
-                "country": "GB",
-                "sunrise": 1725859588,
-                "sunset": 1725906561
-            },
-            "timezone": 3600,
-            "id": 2643743,
-            "name": "London",
-            "cod": 200
-        })
-    const handlechange=(e)=>{
-setcity(e.target.value.toLocaleUpperCase())
-    }
-return (
-  <>
-    <div className="main" ref={main}>
-      <div className="searchpanel">
-        <div className="mainsearch">
-          <input
-            type="text"
-            className="inputfield"
-            onChange={handlechange}
-            value={city}
-            onKeyUp={(e) => searchcity(e)}
-          />
-          <button
-            className="searchicon"
-            id="citysearch"
-            onClick={(e) => searchcity(e)}
-          >
-            <img src={search} alt="search icon" />
-          </button>
-        </div>
-        <ThemeSet></ThemeSet>
-      </div>
-      <h4 className="error" ref={error}>
-        {isError ? "No Result Found !" : ""}
-      </h4>
-      <div className="card">
-        <div className="cardtop">
-          <div className="temphigh">
-            <img
-              src="https://cdn-icons-png.flaticon.com/256/16835/16835278.png"
-              alt=""
-              className="icon"
-            />
-            <div>
-              <h5>Min Temp</h5>
-              <span className="hightemp">{weather?.main.temp_min}°C</span>
-            </div>
-          </div>
-          <div className="country">
-            <span className="placename">
-              🌏{weather?.name},{weather?.sys.country}
-            </span>
-          </div>
-          <div className="temphigh">
-            <div>
-              <h5>Max Temp</h5>
-              <span className="hightemp">{weather?.main.temp_max}°C</span>
-            </div>
-            <img
-              src="https://cdn-icons-png.flaticon.com/256/9839/9839947.png"
-              alt=""
-              className="icon"
-            />
-          </div>
-        </div>
-        <div className="iconandtemp">
-          <div className="spandiv">
-            <span className="temp">{weather?.main.temp}°C</span>
-            <img src={temp} alt="" className="icon" />
-          </div>
-          <div className="icondiv">
-            <img src={image} alt="weather icon" className="weathericon" />
-          </div>
-        </div>
-        <div className="weatherdesc">
-          <h3>{weather?.weather[0].description.toLocaleUpperCase()}</h3>
-        </div>
-        <div className="timedate">
-          <span className="margin">{timedate.date}</span>
-          <span className="margin">{timedate?.time}</span>
-        </div>
-      </div>
-      <div className="row1">
-        <div className="cloudiness">
-          <video autoPlay muted loop>
-            <source
-              src="https://videos.pexels.com/video-files/3129752/3129752-sd_640_360_30fps.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <h3 className="cloudhead">CLOUDINESS</h3>
-          <h3
-            className="cloudhead"
-            style={{ marginTop: "10%", fontSize: "3rem", color: "skyblue" }}
-          >
-            {weather?.clouds.all} %
-          </h3>
-        </div>
-        <div className="sun">
-          <div className="sunrise" style={{ color: theme ? "black" : "white" }}>
-            <h1>Sunrise</h1>
-            <h3>{sun.sunrise} AM</h3>
-          </div>
-          <div className="sunset" style={{ color: theme ? "black" : "white" }}>
-            <h1>Sunset</h1>
-            <h3>{sun.sunset} PM</h3>
-          </div>
-        </div>
-        <div className="extrafields">
-          <div className="winddetails">
-            <h4>Wind</h4>
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/545/545932.png"
-              alt=""
-              className="wind"
-            />
-            <span>{weather.wind.speed} m/s</span>
-          </div>
-          <div className="humiditydetails">
-            <h4>Humidity</h4>
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/6142/6142706.png"
-              alt="humidity"
-              className="humidity"
-            />
-            <span>{weather.main.humidity} %</span>
-          </div>
-          <div className="pressuredetails">
-            <h4>Pressure</h4>
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/12446/12446243.png"
-              alt=""
-              className="pressure"
-            />
-            <span>{weather.main.pressure} hPa</span>
-          </div>
-          <div className="groundleveldetails">
-            <h4>Ground Level</h4>
+import { useContext, useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  IconButton,
+  TextField,
+  Card,
+  CardContent,
+  Grid,
+  Avatar,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { ThemeContext } from "../App";
+import WaterDroplets from "./WaterDroplets";
+import ThemeSet from "./Theme";
+import { Fetchdata } from "../Services/weatherservice";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import CompressIcon from "@mui/icons-material/Compress";
+import FilterDramaIcon from "@mui/icons-material/FilterDrama";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import { motion } from "framer-motion";
+import { keyframes } from "@emotion/react";
 
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/4958/4958454.png"
-              alt=""
-              className="groundlevel"
+const WeatherApp = () => {
+  const [theme] = useContext(ThemeContext);
+  const [city, setCity] = useState("");
+  const [isError, setError] = useState(false);
+  const [weather, setWeather] = useState({
+    main: {
+      temp: 0,
+      temp_min: 0,
+      temp_max: 0,
+      humidity: 0,
+      pressure: 0,
+      grnd_level: 0,
+    },
+    weather: [{ description: "", icon: "" }],
+    wind: { speed: 0 },
+    clouds: { all: 0 },
+    sys: { country: "", sunrise: 0, sunset: 0 },
+    name: "",
+    timezone: 0,
+    dt: 0,
+  });
+  const [image, setImage] = useState("");
+  const [timeDate, setTimeDate] = useState({ date: "", time: "" });
+  const [sun, setSun] = useState({ sunrise: "", sunset: "" });
+  const moveClouds = keyframes`
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 1000px;
+  }
+`;
+const rotatingFan = {
+  animate: {
+    rotate: 360,
+    transition: {
+      repeat: Infinity,
+      duration: 2,
+      ease: "linear",
+
+    },
+  },
+};
+  useEffect(() => {
+    fetchCityData("Tiruvannamalai");
+  }, []);
+
+  const handleChange = (e) => {
+    setCity(e.target.value.toUpperCase());
+  };
+
+  const handleSearch = async (e) => {
+    if (e.key === "Enter" || e.currentTarget.id === "citysearch") {
+      fetchCityData(city);
+    }
+  };
+
+  const fetchCityData = async (cityName) => {
+    try {
+      const response = await Fetchdata(cityName);
+      const data = response.data;
+      setWeather(data);
+      setImage(
+        `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+      );
+
+      const localDate = new Date((data.dt + data.timezone) * 1000)
+        .toUTCString()
+        .split(" ");
+      const timeParts = localDate[4].split(":");
+      const formattedTime = `${timeParts[0]}:${timeParts[1]}`;
+      setTimeDate({
+        date: localDate.slice(0, 4).join(" "),
+        time: formattedTime,
+      });
+
+      const sunrise = new Date((data.sys.sunrise + data.timezone) * 1000)
+        .toUTCString()
+        .split(" ")[4];
+      const sunset = new Date((data.sys.sunset + data.timezone) * 1000)
+        .toUTCString()
+        .split(" ")[4];
+      setSun({
+        sunrise: sunrise.split(":").slice(0, 2).join(":"),
+        sunset: sunset.split(":").slice(0, 2).join(":"),
+      });
+
+      setError(false);
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    }
+  };
+
+  const fadeIn = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.2 },
+    }),
+  };
+
+  // Background image based on theme
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        p: 2,
+        background: theme
+          ? "linear-gradient(to bottom right, #fceabb, #f8b500)" // light sunny warm yellow
+          : "linear-gradient(to bottom right, #0a1216, #16202a, #243242)", // deeper night blues
+        color: theme ? "black" : "#e0e0e0",
+        transition: "background 0.5s ease-in-out",
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          backgroundImage: `url("https://cdn-icons-png.flaticon.com/512/414/414825.png")`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "contain",
+          animation: `${moveClouds} 60s linear infinite`,
+          opacity: theme ? 0.1 : 0.15,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        custom={0}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+          flexWrap="wrap"
+          gap={2}
+        >
+          <Box display="flex" alignItems="center" gap={1}>
+            <TextField
+              variant="outlined"
+              label="Search City"
+              autoComplete="off"
+              onChange={handleChange}
+              onKeyUp={handleSearch}
+              value={city}
+              sx={{
+                input: { color: theme ? "black" : "#e0e0e0" }, // light text
+                label: { color: theme ? "black" : "#90caf9" }, // soft blue label for night
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: theme ? undefined : "#90caf9", // night mode border color
+                  },
+                  "&:hover fieldset": {
+                    borderColor: theme ? undefined : "#42a5f5",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: theme ? undefined : "#1976d2",
+                  },
+                },
+              }}
             />
-            <span>{weather.main.grnd_level} hPa</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </>
-);
-}
-export default WeatherApp
+
+            <IconButton id="citysearch" onClick={handleSearch}>
+              <SearchIcon sx={{ color: theme ? "black" : "white" }} />
+            </IconButton>
+          </Box>
+          <ThemeSet />
+        </Box>
+      </motion.div>
+
+      {isError && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Typography
+            variant="h6"
+            color={theme ? "error" : "#ff8a80"} // soft red for night
+            align="center"
+          >
+            No Result Found!
+          </Typography>
+        </motion.div>
+      )}
+
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        custom={1}
+      >
+        <Card
+          sx={{
+            maxWidth: 700,
+            mx: "auto",
+            bgcolor: theme ? "#fff9c4" : "rgba(18, 24, 27, 0.75)",
+            color: theme ? "black" : "#e0e0e0",
+            boxShadow: theme
+              ? "0 4px 12px rgba(255, 193, 7, 0.3)"
+              : "0 8px 32px rgba(0, 0, 0, 0.7)",
+            borderRadius: 3,
+            backdropFilter: theme ? "none" : "blur(8px)",
+            border: theme ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          <CardContent>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Grid item>
+                <Typography variant="h6">
+                  🌏 {weather.name}, {weather.sys.country}
+                </Typography>
+                <Typography variant="body2">
+                  {timeDate.date} | {timeDate.time}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {weather.weather[0].description}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Avatar src={image} sx={{ width: 80, height: 80 }} />
+              </Grid>
+            </Grid>
+
+            <Card
+              sx={{
+                maxWidth: 700,
+                mx: "auto",
+                mt: 2,
+                bgcolor: theme ? "#fff9c4" : "rgba(18, 24, 27, 0.75)",
+                color: theme ? "black" : "#e0e0e0",
+                boxShadow: theme
+                  ? "0 4px 12px rgba(255, 193, 7, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.7)",
+                borderRadius: 3,
+                backdropFilter: theme ? "none" : "blur(8px)",
+                border: theme ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
+                mb: 2,
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom align="center">
+                  Dawn & Dusk
+                </Typography>
+                <Grid container spacing={2} justifyContent="space-between">
+                  {[
+                    {
+                      label: "Sunrise",
+                      value: `${sun.sunrise} AM`,
+                      icon: (
+                        <WbSunnyIcon
+                          sx={{ mr: 1, color: theme ? "#fdd835" : "#fff176" }}
+                        />
+                      ),
+                    },
+                    {
+                      label: "Sunset",
+                      value: `${sun.sunset} PM`,
+                      icon: (
+                        <NightsStayIcon
+                          sx={{ mr: 1, color: theme ? "#3f51b5" : "#7986cb" }}
+                        />
+                      ),
+                    },
+                  ].map((item, index) => (
+                    <Grid item xs={4} key={index}>
+                      <Typography
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        {item.icon} {item.label}: {item.value}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              </CardContent>
+            </Card>
+            <Card
+              sx={{
+                maxWidth: 700,
+                mx: "auto",
+                mt: 2,
+                bgcolor: theme ? "#fff9c4" : "rgba(18, 24, 27, 0.75)",
+                color: theme ? "black" : "#e0e0e0",
+                boxShadow: theme
+                  ? "0 4px 12px rgba(255, 193, 7, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.7)",
+                borderRadius: 3,
+                backdropFilter: theme ? "none" : "blur(8px)",
+                border: theme ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
+                mb: 2,
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom align="center">
+                  Temperature
+                </Typography>
+                <Grid container spacing={2} justifyContent="space-between">
+                  {[
+                    {
+                      label: "Current",
+                      value: `${weather.main.temp}°C`,
+                      icon: (
+                        <ThermostatIcon
+                          sx={{ mr: 1, color: theme ? "#ff5722" : "#ff8a65" }}
+                        />
+                      ),
+                    },
+                    {
+                      label: "Min",
+                      value: `${weather.main.temp_min}°C`,
+                      icon: (
+                        <ThermostatIcon
+                          sx={{ mr: 1, color: theme ? "#ef5350" : "#ef9a9a" }}
+                        />
+                      ),
+                    },
+                    {
+                      label: "Max",
+                      value: `${weather.main.temp_max}°C`,
+                      icon: (
+                        <ThermostatIcon
+                          sx={{ mr: 1, color: theme ? "#ef5350" : "#ef9a9a" }}
+                        />
+                      ),
+                    },
+                  ].map((item, index) => (
+                    <Grid item xs={4} key={index}>
+                      <Typography
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        {item.icon} {item.label}: {item.value}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              </CardContent>
+            </Card>
+            <Box
+              sx={{
+                mt: 3,
+                p: 2,
+                borderRadius: 2,
+                bgcolor: theme ? "#fff9c4" : "rgba(18, 24, 27, 0.75)",
+                color: theme ? "black" : "#e0e0e0",
+                boxShadow: theme
+                  ? "0 4px 12px rgba(255, 193, 7, 0.3)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.7)",
+                backdropFilter: theme ? "none" : "blur(8px)",
+                border: theme ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 2,
+              }}
+            >
+              <Box>
+                <Typography variant="h6">Wind</Typography>
+                <Typography variant="body2">
+                  Speed: {weather.wind.speed} m/s
+                </Typography>
+              </Box>
+
+              <motion.div variants={rotatingFan} animate="animate">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/17433/17433096.png"
+                  alt="Rotating fan"
+                  style={{ width: 50, height: 50 }}
+                />
+              </motion.div>
+              <Box>
+                <Typography variant="h6">Humidity</Typography>
+                <Typography variant="body2">
+                  {weather.main.humidity} %
+                </Typography>
+              </Box>
+              <motion.div animate="animate" style={{ width: 50, height: 50 }}>
+                <WaterDroplets />
+              </motion.div>
+            </Box>
+
+            <Grid
+              container
+              spacing={2}
+              mt={4}
+              display={"flex"}
+              justifyContent={"space-between"}
+            >
+              {[
+                {
+                  label: "Pressure",
+                  value: `${weather.main.pressure} hPa`,
+                  icon: (
+                    <CompressIcon
+                      sx={{ mr: 1, color: theme ? "#8d6e63" : "#a1887f" }}
+                    />
+                  ),
+                },
+                {
+                  label: "Cloudiness",
+                  value: `${weather.clouds.all} %`,
+                  icon: (
+                    <FilterDramaIcon
+                      sx={{ mr: 1, color: theme ? "#90a4ae" : "#b0bec5" }}
+                    />
+                  ),
+                },
+                {
+                  label: "Ground Level",
+                  value: `${weather.main.grnd_level} hPa`,
+                  icon: (
+                    <CompressIcon
+                      sx={{ mr: 1, color: theme ? "#6d4c41" : "#bcaaa4" }}
+                    />
+                  ),
+                },
+              ].map((item, index) => (
+                <Grid item xs={6} key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>
+                      {item.icon} {item.label}: {item.value}
+                    </Typography>
+                  </motion.div>
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </Box>
+  );
+};
+
+export default WeatherApp;

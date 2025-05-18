@@ -1,25 +1,33 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../App";
+import { IconButton, Tooltip } from "@mui/material";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
-const ThemeSet=()=>{
-    const [theme,settheme]=useContext(ThemeContext)
-    const toggle=useRef()
-    function clickme(){
-        console.log(theme,"im theme");
-        if (theme) {
-            toggle.current.style.marginLeft = "54%";
-            settheme(false);
-        } else {
-            toggle.current.style.marginLeft = "0%";
+const ThemeSet = () => {
+  const [theme, setTheme] = useContext(ThemeContext);
 
-            toggle.current.style.marginRight = "54%";
-            settheme(true);
-        }        
-    }
-    return<>
-    <div className="toggle"   onClick={clickme}>
-       <div className="ball" ref={toggle} ></div>
+  const handleToggle = () => {
+    setTheme(!theme);
+  };
+
+  return (
+    <div style={{ position: "absolute", top: 20, right: 20 }}>
+      <Tooltip title={`Switch to ${theme ? "Light" : "Dark"} Mode`}>
+        <IconButton
+          onClick={handleToggle}
+          color="inherit"
+          sx={{ fontSize: 50 }}
+        >
+          {theme ? (
+            <DarkModeIcon sx={{ fontSize: 50, color: "#3f51b5" }} />
+          ) : (
+            <WbSunnyIcon sx={{ fontSize: 50, color: "#fdd835" }} />
+          )}
+        </IconButton>
+      </Tooltip>
     </div>
-    </>
-}
+  );
+};
+
 export default ThemeSet;
