@@ -1,3 +1,32 @@
+# 🌤️ Weather Forecast Web App
+
+A responsive and theme-supported weather application built using **React**, **TypeScript**, **Material UI**, and the **OpenWeather API**. It allows users to search for any city and view its real-time weather conditions.
+
+---
+
+## 🚀 Features
+
+- 🔍 **City Search**: Search and view weather for any city in the world.
+- ☁️ **Live Weather Updates**: Real-time weather data using the **OpenWeather API**.
+- ⚛️ **Built with React + TypeScript**: Ensures type safety, better code structure, and maintainability.
+- 🎨 **Material UI Styling**: Clean and responsive design with consistent theming.
+- 🌗 **Dark and Light Theme Toggle**: Supports user-preferred theme modes.
+- 🔄 **Axios API Integration**: Efficient and structured API request handling.
+- ⚠️ **Error Handling**: Displays fallback UI for invalid city names or API issues.
+- 🧱 **Component-Based Architecture**: Modular code for better reusability and scalability.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology     | Description                                 |
+|----------------|---------------------------------------------|
+| React          | Frontend library for building UI components |
+| TypeScript     | Superset of JavaScript with static typing   |
+| Material UI    | Modern React UI framework                   |
+| Axios          | Promise-based HTTP client for API calls     |
+| OpenWeatherMap | API for accessing global weather data       |
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
