@@ -13,7 +13,7 @@ const ThemeSet = () => {
 
   return (
     <div style={{ position: "absolute", top: 20, right: 20 }}>
-      <Tooltip title={`Switch to ${theme ? "Light" : "Dark"} Mode`}>
+      <Tooltip title={`Switch to ${theme ? "Dark" : "Light"} Mode`}>
         <IconButton
           onClick={handleToggle}
           color="inherit"
